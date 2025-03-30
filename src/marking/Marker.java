@@ -11,7 +11,7 @@ public class Marker {
 		// Section ONE
 		
 		//you should NOT be able to make an Item - following line shouldn't compile if uncommented
-		//new Item(0, 0, 0);
+//		new Item(0, 0, 0);
 
 		System.out.println(Apples.getGenerationCount()); // should print 0
 		Apples a = new Apples();
