@@ -2,7 +2,6 @@ package students.items;
 
 public class Apple extends Food {
     private static int totAppleObjects = 0;
-    String apple;
 
     public Apple() {
     	// maturation- 3, death- 5, mValue- 3
@@ -17,10 +16,9 @@ public class Apple extends Food {
     @Override
     public String toString() {
     	if (this.age < this.maturationAge) {
-            apple = "a";
+            return "a";
+        } else {
+        	return "A";
         }
-        apple = "A";
-        
-        return apple;
     }
 }
