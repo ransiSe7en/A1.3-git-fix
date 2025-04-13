@@ -80,11 +80,11 @@ public class Farm {
              // Till
             } else if (command.equals("t") && parts.length == 3) {
             	// Get coordinates
-                int col = Integer.parseInt(parts[1]);
-                int row = Integer.parseInt(parts[2]);
+                int col = Integer.parseInt(parts[1])-1;
+                int row = Integer.parseInt(parts[2])-1;
                 
                 // Validate input
-                if (col < 1 || col > field.getWidth() || row < 1 || row > field.getHeight()) {
+                if (col < 0 || col > field.getWidth() || row < 0 || row > field.getHeight()) {
                     System.out.println("Invalid coordinates. Try again.");
                 } else {
                     field.till(row, col);
@@ -94,11 +94,11 @@ public class Farm {
             // Harvest
             } else if (command.equals("h") && parts.length == 3) {
             	// Get coordinates
-                int col = Integer.parseInt(parts[1]); 
-                int row = Integer.parseInt(parts[2]); 
+                int col = Integer.parseInt(parts[1])-1; 
+                int row = Integer.parseInt(parts[2])-1; 
 
                 // Validate input
-                if (col < 1 || col >= field.getWidth() || row < 1 || row >= field.getHeight()) {
+                if (col < 0 || col >= field.getWidth() || row < 0 || row >= field.getHeight()) {
                     System.out.println("Invalid coordinates. Try again.");
                 } else {
                     Item item = field.get(row, col); 
@@ -110,7 +110,9 @@ public class Farm {
                             double value = foodItem.getValue();  
                             // sells the harvest to get money 
                             addMoney((int) value);  
-                            System.out.println("Harvested " + item.toString() + " and gained $" + value);
+                            System.out.println("DEBUG - Crop value: " + foodItem.getValue());
+
+                            System.out.println("Sold '" + item.toString() + "' for $" + value);
                             field.till(row, col); 
                         } else {
                             System.out.println("This crop hasn't matured yet. Try again later.");
@@ -123,11 +125,11 @@ public class Farm {
              // Plant
             } else if((command.equals("p") && parts.length == 3)) {
 	            // Get coordinates
-	            int col = Integer.parseInt(parts[1]);
-	            int row = Integer.parseInt(parts[2]);
+	            int col = Integer.parseInt(parts[1])-1;
+	            int row = Integer.parseInt(parts[2])-1;
 	
 	            // Validate input
-	            if (col < 1 || col > field.getWidth() || row < 1 || row > field.getHeight()) {
+	            if (col < 0 || col > field.getWidth() || row < 0 || row > field.getHeight()) {
 	                System.out.println("Invalid coordinates. Try again.");
 	            } else {
 	                Item currentItem = field.get(row, col);
@@ -142,8 +144,8 @@ public class Farm {
 	                    // Planting pending to check if theres enought money in bank
 	                    Food newPlant = null;
 	                    if (cropChoice.equals("a")) {
-	                    	// In sample output the value for an apple is indicated as just '$', However if we change this value to the price of an apple, the leftover money is calculated accordinly
-	                        if (spendMoney(0)) {
+	                    	// Apple costs 2 to buy as per doc
+	                        if (spendMoney(2)) {
 	                            newPlant = new Apples();
 	                            System.out.println("Bank Balance: $ " + getMoney());
 	                        } else {
@@ -151,8 +153,8 @@ public class Farm {
 	                            continue;
 	                        }
 	                    } else if (cropChoice.equals("g")) {
-	                    	// In sample output the value for a grain is not, However if we change this value to the price of the grain, the leftover money is calculated accordinly
-	                        if (spendMoney(0)) {
+	                        // GRains costs 1 to buy as per doc
+	                    	if (spendMoney(1)) {
 	                            newPlant = new Grain();
 	                            System.out.println("Bank Balance: $ " + getMoney());
 	                        } else {

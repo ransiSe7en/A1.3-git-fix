@@ -8,7 +8,7 @@ public abstract class Food extends Item{
 	
 //	getValue on mature
 	public double getValue() {
-		if(this.age>this.maturationAge) {
+		if(this.age>=this.maturationAge) {
 			return this.monetaryValue;
 		}
 		return 0.0;
