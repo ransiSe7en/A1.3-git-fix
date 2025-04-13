@@ -2,24 +2,70 @@ package students;
 
 import students.items.*;
 
+//to randomise the weather
+import java.util.Random;
+//import students.Weather;
+
 //Represents a 2D farm field containing Items like crops, soil, weeds, etc.
 public class Field {
     private int height;
     private int width;
     private Item[][] field;
+    
+    private Weather currentWeather;
+    private Random random = new Random();
 
-    //Created the field with soil based on dimensions
+    //Getter to get current weather which is randomised
+    public Weather getCurrentWeather() {
+        return currentWeather;
+    }
+
+    // to update the weather
+    private void updateWeather() {
+        int weatherRoll = random.nextInt(100);
+        if (weatherRoll < 20) {
+            currentWeather = Weather.DROUGHT;
+        } else if (weatherRoll >= 20 && weatherRoll < 50)  {
+            currentWeather = Weather.RAIN;
+        } else {
+            currentWeather = Weather.SUNNY;
+        }
+    }
+    
+    //Create the field with soil based on dimensions
     public Field(int height, int width) {
-        this.height = height;
+    	
+    	 // Clamping to max possible field size just incase incorrect field size via user error
+    	 if (height > 10 || width > 10) {
+    	        System.out.println("Field size cannot exceed 10x10. Clamping values.\n");
+    	        height = Math.min(height, 10);
+    	        width = Math.min(width, 10);
+    	    }
+    	
+    	this.height = height;
         this.width = width;
         this.field = new Item[height][width];
-
+        //this.currentWeather = Weather.SUNNY;
+        
+        
+        // the field, rows and columns and making '.' for soil
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
                 field[row][col] = new Soil();
             }
         }
+        
+        // Set initial weather in field to prevent null weather values
+        int weatherRoll = random.nextInt(100);
+        if (weatherRoll < 20) {
+            currentWeather = Weather.DROUGHT;
+        } else if (weatherRoll >= 20 && weatherRoll < 50)  {
+            currentWeather = Weather.RAIN;
+        } else {
+            currentWeather = Weather.SUNNY;
+        }        
     }
+    
     //Returns width of field
     public int getWidth() {
         return width;
@@ -29,31 +75,45 @@ public class Field {
     public int getHeight() {
         return height;
     }
-
     
     // Ages each item when called and updates field
     public void tick() {
+        
+    	updateWeather();
+    	// DEBUG - show weather
+        System.out.println("Today's weather: " + currentWeather);
+        
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
                 Item currentItem = field[row][col];
+                
+                // Apply weather effects
+                if (currentWeather == Weather.DROUGHT) {
+                    // no growth
+                    continue;
+                } else if (currentWeather == Weather.RAIN) {
+                	// EXTRA TICK due to RAIN
+                    currentItem.tick();
+                } 
 
                 // Call tick method for the item (ages it)
                 currentItem.tick();
-
-                // If the item is Soil, 20% chance it turns into Weed
-                if (currentItem instanceof Soil && Math.random() < 0.2) {
-                    field[row][col] = new Weed();  // Soil turns into Weed
-                }
 
                 // If the item has died (age exceeds death age), it turns into UntilledSoil
                 if (currentItem.getAge() > currentItem.getDeathAge()) {
                     field[row][col] = new UntilledSoil();  // Turn into UntilledSoil
                 }
+                
+                // If the item is Soil, 20% chance it turns into Weed
+                if (currentItem instanceof Soil && Math.random() < 0.2) {
+                    field[row][col] = new Weed();  // Soil turns into Weed
+                }
             }
         }
     }
-    
-    // Returns the field as a string (with row and column numbers in human readable format)
+   
+
+	// Returns the field as a string (with row and column numbers in human readable format)
     @Override
     public String toString() {
         StringBuilder fieldRepresentation = new StringBuilder();
@@ -83,6 +143,7 @@ public class Field {
     public void till(int row, int col) {
         // Change the item at the specified location to new Soil
         field[row][col] = new Soil();
+        tick();
     }
     
     //Returns the item at a specific location
@@ -95,6 +156,7 @@ public class Field {
     public void plant(int row, int col, Item item) {
         System.out.printf("Planting at row=%d, col=%d\n", row, col);
         field[row][col] = item;
+        tick();
     }
     
     //Calculates the total value of the field

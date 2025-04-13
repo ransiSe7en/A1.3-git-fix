@@ -43,6 +43,7 @@ public class Farm {
             // Print field and money
             System.out.println(field.toString());
             System.out.println("Bank balance: $" + money);
+            System.out.println("\nToday's weather: " + field.getCurrentWeather());
             System.out.println("Enter your next action:");
             System.out.println("  t x y: till");
             System.out.println("  h x y: harvest");
@@ -113,6 +114,7 @@ public class Farm {
                             System.out.println("DEBUG - Crop value: " + foodItem.getValue());
 
                             System.out.println("Sold '" + item.toString() + "' for $" + value);
+                            // Tills the location and updates tick when harvested as well so that the weather will update.
                             field.till(row, col); 
                         } else {
                             System.out.println("This crop hasn't matured yet. Try again later.");
