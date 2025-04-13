@@ -66,17 +66,17 @@ public class Field {
 
     public void till(int row, int col) {
         // Change the item at the specified location to new Soil
-        field[row][col] = new Soil();
+        field[row-1][col-1] = new Soil();
     }
     
     public Item get(int row, int col) {
         // Return a copy of the item at the specified location
-        return field[row][col];
+        return field[row-1][col-1];
     }
     
     public void plant(int row, int col, Item item) {
         // Place the given item at the specified location
-        field[row][col] = item;
+        field[row-1][col-1] = item;
     }
     
     public double getValue() {
