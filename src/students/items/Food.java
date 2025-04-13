@@ -14,5 +14,9 @@ public abstract class Food extends Item{
 		return 0.0;
 	}
 
+	public double getMaturationAge() {
+		return this.maturationAge;
+	}
+
 
 }
