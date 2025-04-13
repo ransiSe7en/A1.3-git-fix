@@ -14,9 +14,17 @@ public abstract class Item {
 	
 //	tick
 	public void tick() {
-		this.age+=1;
+		this.age++;
 	}
-	
+//  getAge
+    public double getAge() {
+        return this.age;
+    }
+// getDeathAge
+    public double getDeathAge() {
+        return this.deathAge;
+    }
+    
 //	setAge
 	public void setAge(int age) {
 		this.age = age;
