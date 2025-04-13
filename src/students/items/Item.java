@@ -64,5 +64,34 @@ public abstract class Item {
 //	abstract function for subclasses to return a string representation of the item
 	public abstract String toString();
 
+	//FERTILISER
+		private boolean fertilised = false;
+		private int fertilisedDaysLeft = 0;
+
+		
+		// to check if its fertilized to increase tick
+		public boolean isFertilised() {
+		    return fertilised;
+		}
+
+		//when fertliser is bought to apply fertiliser status
+		public void setFertilised(boolean fertilised) {
+		    this.fertilised = fertilised;
+		    if (fertilised) {
+		    	// Fertiliser lasts for 2 ticks
+		        this.fertilisedDaysLeft = 2; 
+		    }
+		}
+		// To keep track of the remaining days that the fertliser would be effective
+		public void updateFertiliserStatus() {
+		    if (fertilised) {
+		        fertilisedDaysLeft--;
+		        System.out.println("Fertiliser days left: " + fertilisedDaysLeft +"\n");
+		        if (fertilisedDaysLeft <= 0) {
+		            fertilised = false;
+		            System.out.println("Fertiliser has worn off.\n");
+		        }
+		    }
+		}
 	
 }

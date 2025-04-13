@@ -48,6 +48,7 @@ public class Farm {
             System.out.println("  t x y: till");
             System.out.println("  h x y: harvest");
             System.out.println("  p x y: plant");
+            System.out.println("  f x y: FERTILISE");
             System.out.println("  s: field summary");
             System.out.println("  w: wait");
             System.out.println("  q: quit");
@@ -106,7 +107,7 @@ public class Farm {
 
                     if (item instanceof Food) {
                         Food foodItem = (Food) item;
-                        //Check to ensure that the item is available for harvest - has matured
+                        //Check to ensure that the FOOD item is available for harvest - has matured
                         if (foodItem.getAge() >= foodItem.getMaturationAge()) {
                             double value = foodItem.getValue();  
                             // sells the harvest to get money 
@@ -174,7 +175,30 @@ public class Farm {
 	                    System.out.println("You can't plant here. The soil is not ready.");
 	                }
 	            }
+	   
+	        //FERTILISE
+            } else if (command.equals("f") && parts.length == 3) {
+            int col = Integer.parseInt(parts[1])-1;
+            int row = Integer.parseInt(parts[2])-1;
+
+            //validate input
+            if (col < 0 || col >= field.getWidth() || row < 0 || row >= field.getHeight()) {
+                System.out.println("Invalid coordinates. Try again.");
             } else {
+            	Item item = field.get(row, col);
+            	if (item instanceof Item) {
+            	    if (spendMoney(1)) {
+            	        item.setFertilised(true);
+            	        System.out.println("Fertilised item at (" + (col+1) + "," + (row+1) + ").");
+            	    } else {
+            	        System.out.println("Not enough money to fertilise.");
+            	    }
+            	} else {
+            	    System.out.println("There is no item to fertilise at that location.");
+            	}
+
+            }
+        } else {
                 System.out.println("Invalid command.");
             }
         }

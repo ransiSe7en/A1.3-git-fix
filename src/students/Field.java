@@ -79,15 +79,17 @@ public class Field {
     // Ages each item when called and updates field
     public void tick() {
         
+    	//update the weather from the previous weather 
     	updateWeather();
     	// DEBUG - show weather
         System.out.println("Today's weather: " + currentWeather);
         
+        //the field and its items
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
                 Item currentItem = field[row][col];
                 
-                // Apply weather effects
+                // APPLY WEATHER EFFECTS
                 if (currentWeather == Weather.DROUGHT) {
                     // no growth
                     continue;
@@ -95,6 +97,12 @@ public class Field {
                 	// EXTRA TICK due to RAIN
                     currentItem.tick();
                 } 
+
+                // APPLY FERTILISER EFFECTS IF BOUGHT
+                if (currentItem.isFertilised()) {
+                    currentItem.updateFertiliserStatus();
+                    currentItem.tick(); // Extra tick for fertilised item
+                }
 
                 // Call tick method for the item (ages it)
                 currentItem.tick();
@@ -154,7 +162,14 @@ public class Field {
 
     //Plants an item at a given location
     public void plant(int row, int col, Item item) {
-        System.out.printf("Planting at row=%d, col=%d\n", row, col);
+    	//DEBUG - System.out.printf("Planting at row=%d, col=%d\n", row, col);
+        field[row][col] = item;
+        tick();
+    }
+    
+    //Fertilises an item at a given location
+    public void fertilise(int row, int col, Item item) {
+    	//DEBUG - System.out.printf("fertilising at row=%d, col=%d\n", row, col);
         field[row][col] = item;
         tick();
     }
